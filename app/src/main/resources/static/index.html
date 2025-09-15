@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clinic System — Select Role</title>
+  <!-- Favicon -->
+  <link rel="icon" href="./assets/favicon.ico" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="./assets/css/index.css" />
+  <link rel="stylesheet" href="./assets/css/style.css" />
+
+  <!-- Utilities / Render helpers (defer prevents render blocking) -->
+  <script src="./js/util.js" defer></script>
+  <script src="./js/render.js" defer></script>
+
+  <!-- UI Components -->
+  <script src="./js/components/header.js" defer></script>
+  <script src="./js/components/footer.js" defer></script>
+</head>
+<body>
+  <noscript>
+    <strong>JavaScript is required to use this app. Please enable it in your browser settings.</strong>
+  </noscript>
+
+  <main class="main-content">
+    <div class="container">
+      <div class="wrapper">
+        <!-- Header placeholder; populated by js/components/header.js -->
+        <div id="header"></div>
+
+        <!-- Core content -->
+        <section class="role-select" aria-labelledby="roleHeading">
+          <h2 id="roleHeading">Select Your Role</h2>
+          <p class="sub">Choose how you'd like to continue.</p>
+
+          <div class="roles">
+            <button id="btnAdmin" class="btn role" onclick="window.selectRole && selectRole('Admin')" aria-label="Select Admin role">Admin</button>
+            <button id="btnDoctor" class="btn role" onclick="window.selectRole && selectRole('Doctor')" aria-label="Select Doctor role">Doctor</button>
+            <button id="btnPatient" class="btn role" onclick="window.selectRole && selectRole('Patient')" aria-label="Select Patient role">Patient</button>
+          </div>
+        </section>
+
+        <!-- Modal (hidden by default; toggled by services/index.js) -->
+        <div id="modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+          <div class="modal-backdrop" id="modalBackdrop" tabindex="-1"></div>
+          <div class="modal-content" role="document">
+            <button id="closeModal" class="modal-close" aria-label="Close modal">&times;</button>
+            <div class="modal-body" id="modal-body">
+              <!-- Dynamic content injected here (e.g., login form for selected role) -->
+              <h3 id="modalTitle" class="modal-title">Welcome</h3>
+              <p>Preparing your login options…</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer placeholder; populated by js/components/footer.js -->
+        <div id="footer"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Service module for role selection + modal behavior -->
+  <!-- Keep this at the end so the DOM is present when the module runs -->
+  <script type="module" src="./js/services/index.js" defer></script>
+
+  <!-- Optional: tiny inline safety net (can be removed once services/index.js is ready) -->
+  <script>
+    // Fallback so onclicks won't error during early development
+    window.selectRole = window.selectRole || function(role){
+      try {
+        localStorage.setItem('selectedRole', role);
+        const modal = document.getElementById('modal');
+        const body = document.getElementById('modal-body');
+        if (body) body.innerHTML = `<h3 class="modal-title">${role} Login</h3><p>You selected <strong>${role}</strong>. This area can render the ${role} login.</p>`;
+        if (modal) {
+          modal.setAttribute('aria-hidden','false');
+          modal.classList.add('open');
+        }
+      } catch (e) { console.warn('Role select fallback:', e); }
+    };
+
+    // Basic close behavior (services/index.js should enhance/replace this)
+    document.addEventListener('DOMContentLoaded', function(){
+      const closeBtn = document.getElementById('closeModal');
+      const modal = document.getElementById('modal');
+      const backdrop = document.getElementById('modalBackdrop');
+      function close(){ modal && modal.classList.remove('open'); modal && modal.setAttribute('aria-hidden','true'); }
+      closeBtn && closeBtn.addEventListener('click', close);
+      backdrop && backdrop.addEventListener('click', close);
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') close(); });
+    });
+  </script>
+</body>
+</html>

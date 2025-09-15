@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard</title>
+
+  <!-- Styles -->
+  <link rel="stylesheet" th:href="@{/assets/css/adminDashboard.css}">
+  <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+
+  <!-- Utilities / Rendering -->
+  <script th:src="@{/js/render.js}" defer></script>
+  <script th:src="@{/js/util.js}" defer></script>
+
+  <!-- Layout Components -->
+  <script th:src="@{/js/components/header.js}" defer></script>
+  <script th:src="@{/js/components/footer.js}" defer></script>
+</head>
+<body>
+  <div class="container">
+    <div class="wrapper">
+      <!-- Dynamic header (header.js will inject content and the Add Doctor button) -->
+      <div id="header"></div>
+
+      <main class="main-content">
+        <!-- Simple toolbar -->
+        <section class="toolbar" style="width:100%; max-width:1100px; margin:auto;">
+          <input
+            type="text"
+            id="searchBar"
+            placeholder="search by doctor name"
+            class="input-field"
+            style="margin-bottom:0.75rem;"
+          />
+
+          <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+            <select id="sortTime" class="select-dropdown">
+              <option value="">Sort by time</option>
+              <option value="Morning">Morning</option>
+              <option value="Afternoon">Afternoon</option>
+              <option value="Evening">Evening</option>
+            </select>
+
+            <select id="filterSpecialty" class="select-dropdown">
+              <option value="">Filter by specialty</option>
+              <!-- You can render server options with Thymeleaf if you have a list -->
+              <option th:each="sp : ${specialties}" th:value="${sp}" th:text="${sp}"></option>
+            </select>
+          </div>
+        </section>
+
+        <!-- Content area where doctor cards will be injected -->
+        <div id="content" style="width:100%; max-width:1100px; margin:1rem auto 0;"></div>
+      </main>
+
+      <!-- Dynamic footer -->
+      <div id="footer"></div>
+    </div>
+  </div>
+
+  <!-- Simple modal for Add Doctor (hidden by default) -->
+  <div id="modal" class="modal" aria-hidden="true">
+    <span id="closeModal" class="close" aria-label="Close">&times;</span>
+    <div id="modal-body"></div>
+  </div>
+
+  <!-- Page scripts -->
+  <script type="module" th:src="@{/js/services/adminDashboard.js}" defer></script>
+  <script type="module" th:src="@{/js/components/doctorCard.js}" defer></script>
+</body>
+</html>

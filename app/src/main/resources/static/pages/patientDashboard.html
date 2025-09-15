@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Patient Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="../assets/favicon.ico" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="../assets/css/adminDashboard.css" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/patientDashboard.css" />
+
+  <!-- JS utilities & components -->
+  <script src="../js/render.js" defer></script>
+  <script src="../js/util.js" defer></script>
+  <script src="../js/components/header.js" defer></script>
+  <script src="../js/components/footer.js" defer></script>
+  <script type="module" src="../js/components/modals.js"></script>
+</head>
+
+<body onload="renderContent()">
+  <div class="container">
+    <div class="wrapper">
+      <!-- Dynamic header (role-based) -->
+      <div id="header"></div>
+
+      <main class="main-content">
+        <!-- Search -->
+        <input
+          type="text"
+          id="searchBar"
+          class="searchBar input-field"
+          placeholder="Search Bar for custom output"
+          aria-label="Search doctors or clinics"
+        />
+
+        <!-- Filters -->
+        <div class="filter-wrapper" style="display:flex; gap:.75rem; flex-wrap:wrap; margin-top:.5rem;">
+          <select class="filter-select select-dropdown" id="filterTime" aria-label="Filter by time">
+            <option value="">Any time</option>
+            <option value="AM">AM</option>
+            <option value="PM">PM</option>
+          </select>
+
+          <select class="filter-select select-dropdown" id="filterSpecialty" aria-label="Filter by specialty">
+            <option value="">All specialties</option>
+            <!-- Populate via JS as needed -->
+            <option value="Cardiology">Cardiology</option>
+            <option value="Dermatology">Dermatology</option>
+            <option value="ENT">ENT</option>
+            <option value="General">General</option>
+          </select>
+        </div>
+
+        <!-- Dynamic content (doctor cards injected here) -->
+        <div id="content" style="margin-top:1rem;"></div>
+      </main>
+
+      <!-- Dynamic footer -->
+      <div id="footer"></div>
+    </div>
+  </div>
+
+  <!-- Reusable Modal -->
+  <div id="modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-content" role="document">
+      <span class="close" id="closeModal" aria-label="Close">&times;</span>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Page logic -->
+  <script type="module" src="../js/patientDashboard.js" defer></script>
+</body>
+</html>

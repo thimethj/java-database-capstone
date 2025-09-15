@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Doctor Dashboard</title>
+
+  <!-- Styles (reuse your global + add a small doctor page css if you want) -->
+  <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+  <link rel="stylesheet" th:href="@{/assets/css/doctorDashboard.css}">
+
+  <!-- Utilities / Components (optional) -->
+  <script th:src="@{/js/util.js}" defer></script>
+  <script th:src="@{/js/render.js}" defer></script>
+  <script th:src="@{/js/components/header.js}" defer></script>
+  <script th:src="@{/js/components/footer.js}" defer></script>
+</head>
+<body>
+  <div class="container">
+    <div class="wrapper">
+      <!-- Dynamic header -->
+      <div id="header"></div>
+
+      <main class="main-content" style="padding:16px;">
+        <section style="width:100%; max-width:1100px; margin:auto;">
+          <h1 style="margin-bottom:10px;">Doctor — Patient & Appointments</h1>
+
+          <!-- Filters -->
+          <div style="display:grid; gap:10px; grid-template-columns: 1fr 200px 200px;">
+            <input id="searchPatient" type="search" class="input-field" placeholder="Search patient by name or ID" />
+            <input id="filterDate" type="date" class="input-field" />
+            <select id="filterStatus" class="select-dropdown">
+              <option value="">All statuses</option>
+              <option value="Scheduled">Scheduled</option>
+              <option value="CheckedIn">Checked In</option>
+              <option value="Completed">Completed</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+          </div>
+
+          <!-- Patients Table -->
+          <div style="overflow:auto; margin-top:12px;">
+            <table style="width:100%; border-collapse: collapse;">
+              <thead>
+                <tr>
+                  <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(255,255,255,.15);">Patient</th>
+                  <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(255,255,255,.15);">Appointment</th>
+                  <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(255,255,255,.15);">Status</th>
+                  <th style="text-align:left; padding:8px; border-bottom:1px solid rgba(255,255,255,.15);">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="patientRows">
+                <!-- Example rows; replace with Thymeleaf or JS render -->
+                <tr th:each="p : ${patients}">
+                  <td style="padding:8px;" th:text="${p.fullName}">John Smith</td>
+                  <td style="padding:8px;">
+                    <span th:text="${p.apptDate}">2025-05-01</span>
+                    <span th:text="${p.apptTime}">09:00</span>
+                  </td>
+                  <td style="padding:8px;" th:text="${p.status}">Scheduled</td>
+                  <td style="padding:8px;">
+                    <button class="btn" type="button"
+                            th:attr="data-id=${p.id}"
+                            onclick="openPrescriptionModal(this.getAttribute('data-id'))">
+                      + Add Prescription
+                    </button>
+                  </td>
+                </tr>
+                <!-- If no data -->
+                <tr th:if="${patients == null or #lists.isEmpty(patients)}">
+                  <td colspan="4" style="padding:10px; opacity:.8;">No records found.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+
+      <!-- Dynamic footer -->
+      <div id="footer"></div>
+    </div>
+  </div>
+
+  <!-- Simple Prescription Modal -->
+  <div id="modal" class="modal" aria-hidden="true">
+    <span id="closeModal" class="close" aria-label="Close">&times;</span>
+    <div id="modal-body">
+      <h2 style="margin-bottom:8px;">Add Prescription</h2>
+      <form id="prescriptionForm">
+        <div class="field">
+          <label for="patientId">Patient ID</label>
+          <input id="patientId" name="patientId" type="text" class="input-field" readonly />
+        </div>
+        <div class="field">
+          <label for="medicine">Medicine</label>
+          <input id="medicine" name="medicine" type="text" class="input-field" placeholder="e.g., Amoxicillin 500mg" />
+        </div>
+        <div class="field">
+          <label for="dosage">Dosage / Instructions</label>
+          <textarea id="dosage" name="dosage" rows="3" class="input-field" placeholder="Take one capsule twice daily after meals."></textarea>
+        </div>
+        <div style="display:flex; gap:8px; margin-top:8px;">
+          <button type="button" class="button" onclick="savePrescription()">Save</button>
+          <button type="button" class="button ghost" onclick="closeModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Minimal page script hooks (replace with modules if needed) -->
+  <script>
+    function openPrescriptionModal(id){
+      document.getElementById('patientId').value = id || '';
+      document.getElementById('modal').classList.add('show');
+      document.getElementById('modal').setAttribute('aria-hidden','false');
+    }
+    function closeModal(){
+      document.getElementById('modal').classList.remove('show');
+      document.getElementById('modal').setAttribute('aria-hidden','true');
+    }
+    document.getElementById('closeModal').addEventListener('click', closeModal);
+
+    function savePrescription(){
+      // TODO: wire to backend
+      closeModal();
+      alert('Prescription saved (demo).');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+/* =========================
+   patientDashboard.css
+   (Simple, focused styles)
+========================= */
+
+/* (Optional) light reset */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; font-family: Arial, sans-serif; }
+
+/* ---------------------------------
+   1) Doctor Card Actions (footer)
+----------------------------------*/
+.card-actions {
+  background: #111827;           /* dark footer strip */
+  text-align: center;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-top: 1px solid rgba(255,255,255,.08);
+  transition: background .15s ease;
+}
+.card-actions:hover {
+  background: #0b1220;           /* slightly darker on hover */
+}
+
+/* Suggested small button preset (optional) */
+.card-actions .btn,
+.card-actions .book-btn {
+  border: 0;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: #015c5d;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform .12s ease, filter .15s ease, background .15s ease;
+}
+.card-actions .btn:hover,
+.card-actions .book-btn:hover {
+  background: #017d7e;           /* hover tint */
+  transform: translateY(-1px);
+  filter: brightness(1.02);
+}
+
+/* ---------------------------------
+   2) Ripple Overlay (global click fx)
+----------------------------------*/
+.ripple-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;          /* ignore mouse */
+  overflow: hidden;
+  z-index: 9999;
+}
+.ripple {
+  position: absolute;
+  width: 12px;                   /* start small, will scale up */
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(1, 124, 126, 0.35); /* teal-ish glow */
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0.95;
+  animation: ripple-expand .65s ease-out forwards;
+}
+@keyframes ripple-expand {
+  60% {
+    transform: translate(-50%, -50%) scale(35);
+    opacity: 0.28;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(55);
+    opacity: 0;
+  }
+}
+
+/* ---------------------------------
+   3) Bottom Pop-Up Modal (Appointment)
+----------------------------------*/
+.modalApp {
+  position: fixed;
+  left: 50%;
+  bottom: -100%;                 /* hidden off-screen initially */
+  transform: translateX(-50%);
+  width: min(720px, 92%);
+  background: #ffffff;
+  color: #111827;
+  padding: 16px;
+  border-radius: 16px 16px 0 0;  /* rounded top corners */
+  box-shadow: 0 -10px 30px rgba(0,0,0,.25);
+  z-index: 9998;
+  transition: bottom .28s ease-in-out;
+}
+.modalApp.active {
+  bottom: 0;                     /* slides up into view */
+}
+
+/* Optional dim background */
+.modalApp-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  display: none;
+  z-index: 9997;
+}
+.modalApp-backdrop.show { display: block; }
+
+/* ---------------------------------
+   4) Modal Form Fields
+----------------------------------*/
+.modalApp .form-wrap {
+  display: grid;
+  place-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+.modalApp .form-field {
+  width: 90%;                    /* uniform width */
+  display: grid;
+  gap: 6px;                      /* vertical spacing */
+}
+.modalApp .form-field label {
+  font-size: 14px;
+  color: #334155;
+}
+.modalApp .form-field input,
+.modalApp .form-field select,
+.modalApp .form-field textarea {
+  width: 100%;
+  padding: 10px 12px;            /* usable padding */
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  color: #111827;
+  outline: none;
+  transition: border .15s ease, box-shadow .2s ease, background .15s ease;
+}
+.modalApp .form-field input:focus,
+.modalApp .form-field select:focus,
+.modalApp .form-field textarea:focus {
+  border-color: #017d7e;
+  box-shadow: 0 0 0 3px rgba(1,125,126,.18);
+  background: #ffffff;
+}
+
+/* ---------------------------------
+   5) Booking Confirmation Button
+----------------------------------*/
+.modalApp .confirm-btn {
+  width: 90%;
+  margin: 8px auto 4px;
+  display: block;
+  border: 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #111827;           /* dark colored, theme-aligned */
+  color: #ffffff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter .15s ease, transform .12s ease;
+}
+.modalApp .confirm-btn:hover {
+  filter: brightness(1.2);       /* subtle feedback on hover */
+  transform: translateY(-1px);
+}
+
+/* Close icon (optional) */
+.modalApp .close {
+  position: absolute;
+  right: 12px;
+  top: 10px;
+  font-size: 24px;
+  color: #334155;
+  cursor: pointer;
+}
+.modalApp .close:hover { color: #0f172a; }
+
+/* ---------------------------------
+   6) Responsive
+----------------------------------*/
+@media (max-width: 640px) {
+  .modalApp { padding: 14px; border-radius: 14px 14px 0 0; }
+  .modalApp .confirm-btn { padding: 11px 12px; }
+}
